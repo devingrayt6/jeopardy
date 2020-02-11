@@ -1,4 +1,5 @@
 import store from "../store.js";
+import Question from "../Models/Question.js";
 
 const _api = axios.create({
     baseURL: 'http://jservice.io/api/', 
@@ -7,13 +8,13 @@ const _api = axios.create({
 
 
 class QuestionsService {
-
-
     getQuestions(){
         _api
             .get('random')
             .then(res => {
-                console.log(res);
+                let questions = res.data.map(q => new Question(q));
+                store.commit("questions", questions)
+                console.log(res.data)
             })
             .catch(error => {
                 console.log(error)
